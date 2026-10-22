@@ -53,6 +53,22 @@
     $$("main section[id]").forEach((s) => spy.observe(s));
   }
 
+  /* --------------------- images: one source of truth --------------------- */
+  const IMG = Object.fromEntries((D.IMAGES || []).map((i) => [i.id, i]));
+  const shortAuthor = (a) => a.replace(/ from .*$/, "");
+  function buildImage(fig) {
+    const m = IMG[fig.dataset.img]; if (!m) return;
+    const duo = fig.dataset.variant === "duo" && m.duo;
+    const base = "assets/img/" + m.id + (duo ? "-duo" : "");
+    const src = m.widths.map((w) => base + "-" + w + ".webp " + w + "w").join(", ");
+    const big = Math.max.apply(null, m.widths);
+    fig.innerHTML =
+      '<img src="' + base + "-" + big + '.webp" srcset="' + src + '" sizes="' + esc(fig.dataset.sizes || "100vw") + '" width="' + m.w + '" height="' + m.h + '" loading="lazy" decoding="async" alt="' + esc(m.alt) + '">' +
+      "<figcaption>" + esc(m.caption) + ' <span class="credit">Photo: ' + esc(shortAuthor(m.author)) + ", " +
+      '<a href="' + esc(m.licenseUrl) + '" target="_blank" rel="noopener">' + esc(m.license) + '</a>, via <a href="' + esc(m.page) + '" target="_blank" rel="noopener">Wikimedia Commons</a>.</span></figcaption>';
+  }
+  $$("[data-img]").forEach(buildImage);
+
   /* ------------------------------- timeline ------------------------------- */
   const TRACK = { city: "Seattle and Washington", owners: "The owners", both: "Both sides" };
   const tl = $("#tl");

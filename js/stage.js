@@ -292,6 +292,21 @@ export async function start(DATA) {
   gsap.to(spans, { yPercent: 0, y: 0, duration: 1.3, ease: (x) => arrive(x), stagger: 0.09, delay: 0.1 });
   gsap.fromTo([".hero-q", ".hero-by", ".hero-actions"], { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: (x) => arrive(x), stagger: 0.1, delay: 0.55 });
 
+  /* the one reveal every section uses: heading wipes up, the lede follows */
+  gsap.utils.toArray("main h2").forEach((h) => {
+    if (h.closest(".hero")) return;
+    const lead = h.nextElementSibling && h.nextElementSibling.classList.contains("lead") ? h.nextElementSibling : null;
+    gsap.set(h, { clipPath: "inset(0 0 100% 0)", yPercent: 16 });
+    if (lead) gsap.set(lead, { opacity: 0, y: 14 });
+    ScrollTrigger.create({
+      trigger: h, start: "top 90%", once: true,
+      onEnter: () => {
+        gsap.to(h, { clipPath: "inset(0 0 0% 0)", yPercent: 0, duration: 1.05, ease: (x) => arrive(x), clearProps: "clipPath,transform" });
+        if (lead) gsap.to(lead, { opacity: 1, y: 0, duration: 0.9, delay: 0.15, ease: (x) => arrive(x), clearProps: "opacity,transform" });
+      },
+    });
+  });
+
   let lost = false;
   const onLost = () => {
     if (lost) return; lost = true;

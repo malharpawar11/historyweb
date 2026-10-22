@@ -10,7 +10,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:Milwaukee_Bucks_vs_Seattle_SuperSonics_-_February_14th,_2006_(100071979).jpg",
   "title": "Milwaukee Bucks vs Seattle SuperSonics - February 14th, 2006 (100071979).jpg",
   "duo": true,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 1200
  },
  {
   "id": "city-hall",
@@ -22,7 +28,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:Seattle_City_Hall_(31068413745).jpg",
   "title": "Seattle City Hall (31068413745).jpg",
   "duo": true,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 1067
  },
  {
   "id": "legislative-building",
@@ -34,7 +46,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:Washington_State_Capitol_Legislative_Building_Dome_02.jpg",
   "title": "Washington State Capitol Legislative Building Dome 02.jpg",
   "duo": true,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 1067
  },
  {
   "id": "ford-center",
@@ -46,7 +64,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:OKC_Ford_Center.jpg",
   "title": "OKC Ford Center.jpg",
   "duo": true,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 734
  },
  {
   "id": "keyarena-2018",
@@ -58,7 +82,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:KeyArena_Seattle_2018.jpg",
   "title": "KeyArena Seattle 2018.jpg",
   "duo": true,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 1200
  },
  {
   "id": "coliseum-1962",
@@ -70,7 +100,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:Coliseum_interior,_Seattle_World%27s_Fair,_1962.jpg",
   "title": "Coliseum interior, Seattle World's Fair, 1962.jpg",
   "duo": false,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 1245
  },
  {
   "id": "climate-pledge-2022",
@@ -82,7 +118,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:Climate_Pledge_Arena_N.jpg",
   "title": "Climate Pledge Arena N.jpg",
   "duo": false,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1600
+  ],
+  "w": 1600,
+  "h": 900
  },
  {
   "id": "keyarena-2008",
@@ -94,7 +136,13 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:KeyArena_(2890740573).jpg",
   "title": "KeyArena (2890740573).jpg",
   "duo": false,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [
+   800,
+   1280
+  ],
+  "w": 1280,
+  "h": 960
  },
  {
   "id": "us-map",
@@ -106,6 +154,9 @@ window.DATA.IMAGES = [
   "page": "https://commons.wikimedia.org/wiki/File:Blank_map_of_states.png",
   "title": "Blank map of states.png",
   "duo": false,
-  "retrieved": "2026-10-21"
+  "retrieved": "2026-10-21",
+  "widths": [],
+  "w": 1280,
+  "h": 850
  }
 ];
