@@ -27,6 +27,23 @@
     history.replaceState(null, "", id);
   });
 
+  /* ------------------------------ lite mode ------------------------------ */
+  /* Turns off every 3D scene and all scroll motion and shows the clean 2D page. Remembered in this browser. */
+  const liteBtn = $("#lite-btn");
+  if (liteBtn) {
+    const on = html.classList.contains("lite"), auto = !on && html.classList.contains("no-3d");
+    liteBtn.setAttribute("aria-pressed", String(on || auto));
+    if (on) liteBtn.textContent = "Lite mode: on";
+    else if (auto) {
+      const why = html.classList.contains("rm") ? "reduced motion is on" : html.classList.contains("no-gl") ? "3D is not available here" : "on for this view";
+      liteBtn.textContent = "Lite mode: on"; liteBtn.title = "Lite mode is on because " + why + "."; liteBtn.disabled = true;
+    }
+    liteBtn.addEventListener("click", () => {
+      try { localStorage.setItem("lite", on ? "0" : "1"); } catch (e) { /* private mode: nothing to remember */ }
+      location.reload();
+    });
+  }
+
   /* ---------------------------- mobile menu ---------------------------- */
   const menu = $("#menu"), menuBtn = $("#menu-btn");
   function setMenu(open) {

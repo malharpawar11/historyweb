@@ -36,7 +36,11 @@
     } catch (e) {}
     if (rm) d.classList.add("rm");
     var forced = /[?&]static\b/.test(location.search);   // ?static shows the no-3D version on purpose
-    if (gl && !rm && !sd && !forced) d.classList.add("has-3d", "pre-motion"); else d.classList.add("no-3d");
+    var lite = false;   // the visitor's own choice, remembered
+    try { lite = localStorage.getItem("lite") === "1"; } catch (e) {}
+    if (lite) d.classList.add("lite");
+    if (!gl) d.classList.add("no-gl");
+    if (gl && !rm && !sd && !forced && !lite) d.classList.add("has-3d", "pre-motion"); else d.classList.add("no-3d");
   })();
 </script>
 </head>
@@ -59,6 +63,7 @@
         <li><a href="#argument">Answer</a></li>
         <li><a href="#then-now">Now</a></li>
         <li><a href="#sources">Sources</a></li>
+        <li class="lite-li"><button type="button" class="lite-btn" id="lite-btn" aria-pressed="false">Lite mode: off</button></li>
       </ul>
     </nav>
   </div>

@@ -83,6 +83,11 @@ p { text-wrap: pretty; }
 .menu { display: flex; gap: var(--s1); }
 .menu a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s3); color: var(--on-field-2); text-decoration: none; font-weight: 500; font-size: 0.98rem; }
 .menu a:hover { color: var(--on-field); }
+.lite-li { display: flex; align-items: center; margin-left: var(--s2); }
+.lite-btn { min-height: 44px; padding: 0 var(--s3); background: none; border: 1px solid var(--on-field-2); color: var(--on-field-2); font: 500 0.9rem var(--text); cursor: pointer; white-space: nowrap; }
+.lite-btn:hover:not(:disabled) { color: var(--on-field); border-color: var(--on-field); }
+.lite-btn:disabled { cursor: default; opacity: 0.8; }
+.lite-btn[aria-pressed="true"] { border-color: var(--gold); color: var(--on-field); }
 .menu a[aria-current="true"] { color: var(--on-field); text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 3px; text-underline-offset: 8px; }
 .menu-btn { display: none; min-height: 44px; padding: 0 var(--s4); background: var(--field); border: 0; font-weight: 600; cursor: pointer; }
 @media (max-width: 960px) {
@@ -90,6 +95,7 @@ p { text-wrap: pretty; }
   .menu { position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; padding: var(--s3) var(--gutter) var(--s5); background: var(--field-deep); visibility: hidden; opacity: 0; transform: translateY(-6px); transition: opacity 200ms var(--arrive), transform 200ms var(--arrive), visibility 0s 200ms; }
   .menu.open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
   .menu a { width: 100%; font-size: 1.15rem; }
+  .lite-li { margin: var(--s3) 0 0; }
 }
 
 /* ------------------------------------ hero ------------------------------------ */
