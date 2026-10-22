@@ -214,30 +214,51 @@
   const slidersEl = $("#sliders"), totalEl = $("#total"), compareBtn = $("#compare"), cmp = $("#cmp");
   const mine = Object.fromEntries(D.CAUSES.map((c) => [c.id, c.weight]));
   const yours = Object.fromEntries(D.CAUSES.map((c) => [c.id, 0]));
+  const stackEl = $("#stack"), stackN = $("#stack-n"), stackHint = $("#stack-hint");
   slidersEl.innerHTML = ORDER.map((id) =>
-    '<div class="sl"><label for="s_' + id + '"><span>' + esc(BY_ID[id].name) + '</span><output id="v_' + id + '" for="s_' + id + '">0</output></label>' +
+    '<div class="sl"><label for="s_' + id + '"><span><i class="sw ' + BY_ID[id].theme + '" aria-hidden="true"></i>' + esc(BY_ID[id].name) + '</span><output id="v_' + id + '" for="s_' + id + '">0</output></label>' +
     '<input id="s_' + id + '" type="range" min="0" max="100" step="1" value="0"></div>').join("");
+  /* the 100-point stack: one block per cause, resized live; whatever is unspent stays an open slot */
+  stackEl.innerHTML = ORDER.map((id) => '<i class="blk ' + BY_ID[id].theme + '" data-id="' + id + '" style="flex-grow:0"><span>' + esc(BY_ID[id].tiny) + "</span></i>").join("") + '<i class="blk rest" style="flex-grow:100"></i>';
+  const blocks = Object.fromEntries(ORDER.map((id) => [id, stackEl.querySelector('[data-id="' + id + '"]')]));
+  const restBlk = stackEl.querySelector(".rest");
   const total = () => Object.values(yours).reduce((a, b) => a + b, 0);
+  let lastT = 0;
   function refresh() {
     const t = total();
     totalEl.textContent = "Points used: " + t + " / 100" + (t > 100 ? " (over by " + (t - 100) + ")" : t < 100 && t > 0 ? " (" + (100 - t) + " left)" : "");
     totalEl.classList.toggle("bad", t > 100);
     compareBtn.disabled = t !== 100;
     cmp.innerHTML = "";
+    ORDER.forEach((id) => { blocks[id].style.flexGrow = yours[id]; blocks[id].classList.toggle("thin", yours[id] < 9); });
+    restBlk.style.flexGrow = Math.max(0, 100 - t);
+    stackEl.classList.toggle("over", t > 100);
+    stackEl.classList.toggle("full", t === 100);
+    stackN.textContent = t;
+    if (t !== lastT) { stackN.classList.remove("tick"); void stackN.offsetWidth; stackN.classList.add("tick"); lastT = t; }
+    stackHint.textContent = t > 100 ? "Over by " + (t - 100) + ". Take some back." : t === 100 ? "All 100 placed. Compare with mine." : t === 0 ? "Slide a bar to place a block." : (100 - t) + " points still to place.";
   }
   ORDER.forEach((id) => $("#s_" + id).addEventListener("input", (e) => { yours[id] = +e.target.value; $("#v_" + id).textContent = yours[id]; refresh(); }));
   compareBtn.addEventListener("click", () => {
-    const rows = ORDER.slice().sort((a, b) => mine[b] - mine[a]).map((id) => {
+    const order = ORDER.slice().sort((a, b) => mine[b] - mine[a]);
+    const rows = order.map((id) => {
       const diff = yours[id] - mine[id];
       const note = diff === 0 ? "same" : diff > 0 ? "you gave " + diff + " more" : "you gave " + -diff + " fewer";
-      return '<div class="cmp-row"><span>' + esc(BY_ID[id].name) + '</span><span class="pair" aria-hidden="true"><i class="y" style="width:' + yours[id] + '%"></i><i class="m" style="width:' + mine[id] + '%"></i></span><span class="tabular">' + yours[id] + " vs " + mine[id] + ", " + note + "</span></div>";
+      return '<div class="cmp-row"><span>' + esc(BY_ID[id].name) + '</span><span class="pair" aria-hidden="true"><i class="y" data-w="' + yours[id] + '"></i><i class="m" data-w="' + mine[id] + '"></i></span><span class="tabular">' + yours[id] + " vs " + mine[id] + ", " + note + "</span></div>";
     }).join("");
-    cmp.innerHTML = '<p class="cmp-key">Black bars are yours, green bars are mine. No split is the right one. The useful question is what evidence would move it.</p>' + rows;
+    const moved = order.reduce((a, id) => a + Math.abs(yours[id] - mine[id]), 0) / 2;
+    const gap = order.slice().sort((a, b) => Math.abs(yours[b] - mine[b]) - Math.abs(yours[a] - mine[a]))[0];
+    const gapTxt = Math.abs(yours[gap] - mine[gap]) === 0 ? "Your split matches mine." : "To match my split you would move " + moved + " of the 100 points. The biggest gap is " + BY_ID[gap].name.toLowerCase() + ".";
+    cmp.innerHTML = '<p class="cmp-sum">' + esc(gapTxt) + '</p><p class="cmp-key">Black bars are yours, green bars are mine. No split is the right one. The useful question is what evidence would move it.</p>' + rows;
+    const bars = cmp.querySelectorAll(".pair i");   // grow from zero, one row after another
+    bars.forEach((b, i) => { b.style.transitionDelay = Math.floor(i / 2) * 60 + "ms"; });
+    requestAnimationFrame(() => requestAnimationFrame(() => bars.forEach((b) => { b.style.width = Math.min(100, b.dataset.w * 2.5) + "%"; })));
   });
   $("#reset").addEventListener("click", () => {
     ORDER.forEach((id) => { yours[id] = 0; $("#s_" + id).value = 0; $("#v_" + id).textContent = 0; });
     refresh();
   });
+  refresh();
 
   /* -------------------------------- sources -------------------------------- */
   const SRC_ORDER = ["ap_bulletin", "ap_stern", "ap_settle", "ap_leg07", "balko", "booth", "brunner07", "brunner08", "seattlecenter", "eide", "horsefeathers", "kershner", "licata", "nba26", "fox13", "sleeper", "fos"];
