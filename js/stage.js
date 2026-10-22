@@ -79,99 +79,6 @@ function visibleLoop(el, tick) {
   return { once: () => tick(0.016, performance.now() / 1000) };
 }
 
-/* ================================== HERO BALL ================================== */
-function leather() {
-  const w = 1024, h = 512;
-  const c = document.createElement("canvas"); c.width = w; c.height = h;
-  const x = c.getContext("2d");
-  x.fillStyle = "#0f5b3a"; x.fillRect(0, 0, w, h);
-  for (let i = 0; i < 220; i++) {
-    x.fillStyle = "rgba(" + (Math.random() < 0.5 ? "0,0,0" : "255,255,255") + "," + (0.012 + Math.random() * 0.02) + ")";
-    x.beginPath(); x.arc(Math.random() * w, Math.random() * h, 24 + Math.random() * 70, 0, 6.283); x.fill();
-  }
-  const b = document.createElement("canvas"); b.width = w; b.height = h;
-  const y = b.getContext("2d");
-  y.fillStyle = "#7a7a7a"; y.fillRect(0, 0, w, h);
-  for (let i = 0; i < 9000; i++) {
-    const px = Math.random() * w, py = Math.random() * h, r = 2.4 + Math.random() * 1.8;
-    const g = y.createRadialGradient(px, py, 0, px, py, r);
-    g.addColorStop(0, "rgba(255,255,255,0.6)"); g.addColorStop(1, "rgba(122,122,122,0)");
-    y.fillStyle = g; y.beginPath(); y.arc(px, py, r, 0, 6.283); y.fill();
-  }
-  const map = new THREE.CanvasTexture(c); map.colorSpace = THREE.SRGBColorSpace;
-  const bump = new THREE.CanvasTexture(b);
-  return { map, bump };
-}
-
-function heroScene() {
-  const stage = document.querySelector(".hero-stage");
-  const canvas = document.getElementById("hero-canvas");
-  if (!stage || !canvas) return null;
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, MAX_DPR));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  const scene = new THREE.Scene();
-  scene.environment = makeEnvironment(renderer);
-  const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 50); camera.position.set(0, 0, 7.2);
-
-  const key = new THREE.DirectionalLight(0xfff0d8, 2.2); key.position.set(-3, 4, 5); scene.add(key);
-  const sky = new THREE.HemisphereLight(0xcfe9dc, 0x04251a, 0.45); scene.add(sky);
-  const rim = new THREE.PointLight(0xf6b800, 28, 0, 2); rim.position.set(4, -1, -3); scene.add(rim);
-
-  const { map, bump } = leather();
-  const ball = new THREE.Group(); scene.add(ball);
-  const skin = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 96, 64),
-    new THREE.MeshPhysicalMaterial({ map, bumpMap: bump, bumpScale: 2.0, roughness: 0.58, metalness: 0, clearcoat: 0.25, clearcoatRoughness: 0.5, envMapIntensity: 1.1 })
-  );
-  ball.add(skin);
-  const inlay = new THREE.MeshStandardMaterial({ color: 0xf6b800, roughness: 0.38, metalness: 0.55, envMapIntensity: 1.3 });
-  const ring = (R, rx, ry, px) => {
-    const m = new THREE.Mesh(new THREE.TorusGeometry(R, 0.017, 14, 160), inlay);
-    m.rotation.set(rx, ry, 0); m.position.x = px; ball.add(m);
-  };
-  ring(0.997, 0, 0, 0);                    // meridian
-  ring(0.997, Math.PI / 2, 0, 0);          // equator
-  ring(0.864, 0, Math.PI / 2, 0.5);        // side channel, right
-  ring(0.864, 0, Math.PI / 2, -0.5);       // side channel, left
-
-  const state = { px: 0, py: 0, spin: 0, rx: 0, ry: 0, rz: 0, y: 0, born: 0, started: false };
-  const pointer = (e) => { state.px = (e.clientX / innerWidth) * 2 - 1; state.py = (e.clientY / innerHeight) * 2 - 1; };
-  if (!coarse) addEventListener("pointermove", pointer, { passive: true });
-
-  const resize = () => {
-    const w = stage.clientWidth, h = stage.clientHeight;
-    if (!w || !h) return;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h; camera.updateProjectionMatrix();
-    state.base = clamp((w / h) * 1.55, 0.55, 1.22);
-  };
-  new ResizeObserver(resize).observe(stage); resize();
-  const guard = perfGuard(renderer, resize);
-
-  const heroH = () => document.querySelector(".hero").offsetHeight;
-  const tick = (dt, time) => {
-    if (!state.started) { state.started = true; state.born = time; stage.classList.add("ready"); }
-    const age = clamp((time - state.born) / 1.7, 0, 1), a = arrive(age);
-    const p = clamp(scrollY / heroH(), 0, 1.2);
-    state.spin += dt * 0.16;
-    const tx = state.py * 0.32 + p * 0.9, ty = state.spin + state.px * 0.55 + (1 - a) * -1.6, tz = p * 0.5;
-    state.rx = damp(state.rx, tx, 3, dt); state.ry = damp(state.ry, ty, 3, dt); state.rz = damp(state.rz, tz, 3, dt);
-    state.y = damp(state.y, p * 1.1, 3, dt);
-    ball.rotation.set(state.rx, state.ry, state.rz);
-    ball.position.y = state.y;
-    ball.scale.setScalar(state.base * (0.72 + 0.28 * a) * (1 - p * 0.18));
-    renderer.render(scene, camera);
-    guard(dt);
-  };
-  const loop = visibleLoop(stage, tick);
-  canvas.addEventListener("webglcontextlost", () => { stage.classList.remove("ready"); }, false);
-  loop.once();
-  return { stage };
-}
-
 /* ================================= DOMINO CHAIN ================================= */
 const T = 0.3, H = 1.7, D = 1.0, S = 1.1;       // thickness, height, width, spacing
 const THETA = 1.12, THETA_LAST = 1.46;           // resting lean, last domino lies almost flat
@@ -395,7 +302,12 @@ export async function start(DATA) {
     ScrollTrigger.refresh();
   };
 
-  try { heroScene(); } catch (e) { console.warn("hero scene unavailable", e); }
+  /* one shared renderer for every stage on the page; the hero is the first stage */
+  try {
+    const gl = await import("./gl.js");
+    gl.init(); gl.onLost(onLost);
+    (await import("./hero.js")).init();
+  } catch (e) { console.warn("hero scene unavailable", e); }
 
   /* domino chain: pinned, driven by scroll */
   let chain = null, chainBuilt = false;

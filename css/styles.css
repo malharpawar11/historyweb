@@ -103,10 +103,10 @@ p { text-wrap: pretty; }
 .hero-by { color: var(--on-field-2); font-size: 0.98rem; margin-bottom: var(--s6); }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s5); }
 .hero-stage { position: relative; align-self: stretch; min-height: 360px; margin-right: calc(var(--gutter) * -0.6); }
-.hero-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 700ms var(--arrive); }
 .ball-static { position: absolute; inset: 0; margin: auto; width: min(100%, 440px); height: auto; transition: opacity 500ms; }
-.hero-stage.ready canvas { opacity: 1; }
 .hero-stage.ready .ball-static { opacity: 0; }
+#gl { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.hero-copy { position: relative; z-index: 2; }
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: 1fr; padding-block: var(--s6) var(--s7); }
   .hero-stage { order: -1; min-height: 52vw; max-height: 340px; margin: 0; }
