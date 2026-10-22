@@ -164,7 +164,7 @@ p { text-wrap: pretty; }
 .tl-card h3 { font-size: 1.3rem; margin-bottom: var(--s2); }
 .tl-card p { font-size: 1rem; line-height: 1.5; }
 .tl-card .track { margin-top: var(--s3); font-size: 0.88rem; opacity: 0.85; }
-.tl-card .go { display: inline-block; min-height: 44px; margin-top: var(--s1); padding: 0; background: none; border: 0; cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; }
+.tl-card .go { display: inline-block; min-height: 44px; margin-top: var(--s1); padding: 0; background: none; border: 0; cursor: pointer; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 0.2em; }
 .tl-card.owners .go { color: var(--gold); }
 .tl-card.owners { --focus: var(--gold); }
 .is-both { margin-bottom: var(--s6); }

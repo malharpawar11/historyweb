@@ -231,11 +231,18 @@
 
   render();
 
+  /* Without the 3D chain, the hero button points at the timeline instead. */
+  function pointCtaAtTimeline() {
+    const cta = $(".hero-actions .btn");
+    if (cta) { cta.setAttribute("href", "#timeline"); cta.textContent = "Follow the timeline"; }
+  }
+  if (html.classList.contains("no-3d")) pointCtaAtTimeline();
+
   /* ------------------------- 3D layer, loaded lazily ------------------------- */
   if (html.classList.contains("has-3d")) {
     const go = () => import("./stage.js").then((m) => m.start(D)).catch((err) => {
       console.warn("3D layer failed to load; the page stays fully readable.", err);
-      html.classList.remove("has-3d", "pre-motion"); html.classList.add("no-3d");
+      html.classList.remove("has-3d", "pre-motion"); html.classList.add("no-3d"); pointCtaAtTimeline();
     });
     const idle = window.requestIdleCallback || ((f) => setTimeout(f, 200));
     window.addEventListener("load", () => idle(go, { timeout: 1500 }));

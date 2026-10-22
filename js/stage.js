@@ -384,6 +384,7 @@ export async function start(DATA) {
   const onLost = () => {
     if (lost) return; lost = true;
     html.classList.add("no-3d"); html.classList.remove("has-3d");
+    const cta = document.querySelector(".hero-actions .btn"); if (cta) { cta.setAttribute("href", "#timeline"); cta.textContent = "Follow the timeline"; }
     ScrollTrigger.getAll().forEach((s) => s.kill());
     document.querySelector(".hero-stage")?.classList.remove("ready");
     ScrollTrigger.refresh();
