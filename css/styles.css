@@ -197,6 +197,17 @@ p { text-wrap: pretty; }
 .web-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); margin-top: var(--s7); align-items: start; }
 .web-card { position: sticky; top: calc(var(--nav-h) + var(--s5)); }
 #web { width: 100%; height: auto; touch-action: manipulation; }
+.web-card { z-index: 2; }
+.graph3d, .graph-hint { display: none; }
+.has-3d:not(.graph-flat) .graph3d { display: block; position: relative; z-index: 2; width: 100%; aspect-ratio: 1 / 1; max-height: 76vh; margin-inline: auto; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.has-3d:not(.graph-flat) .graph-hint { display: block; margin-top: var(--s2); color: var(--on-field-2); font-size: 0.92rem; }
+.has-3d:not(.graph-flat) #web { display: none; }
+.graph-labels { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.gnode { position: absolute; left: 0; top: 0; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; font: 600 13px var(--text); text-align: center; line-height: 1.05; padding: 4%; box-sizing: border-box; white-space: nowrap; pointer-events: none; will-change: transform; }
+.gnode:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.ghub { position: absolute; left: 0; top: 0; display: grid; place-content: center; text-align: center; color: var(--on-field); pointer-events: none; font-family: var(--display); will-change: transform; }
+.ghub b { font: 800 1em/1.05 var(--display); }
+.ghub i { font: 700 0.8em/1 var(--display); color: var(--gold); font-style: normal; }
 .web-key { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin-top: var(--s4); color: var(--on-field-2); font-size: 0.92rem; }
 .web-key li { display: inline-flex; align-items: center; gap: var(--s2); }
 .web-key i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }

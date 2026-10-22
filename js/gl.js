@@ -123,8 +123,15 @@ function frame(t) {
     renderer.setScissor(x0, H - y1, x1 - x0, y1 - y0);
     const a = r.width / r.height;
     if (Math.abs(a - s._aspect) > 1e-4) { s._aspect = a; s.camera.aspect = a; s.camera.updateProjectionMatrix(); s.onAspect && s.onAspect(a, r); }
-    s.update && s.update(dt, t / 1000, r);
-    renderer.render(s.scene, s.camera);
+    try {
+      s.update && s.update(dt, t / 1000, r);
+      renderer.render(s.scene, s.camera);
+    } catch (err) {
+      // one broken stage must never stop the others
+      s._errors = (s._errors || 0) + 1;
+      if (s._errors === 1) console.error("3D stage failed:", s.el.id || s.el.className, err);
+      if (s._errors >= 5) { s.enabled = false; s.onFail && s.onFail(err); }
+    }
   }
 
   // keep frame time honest on a school laptop: step the pixel ratio down if frames run long

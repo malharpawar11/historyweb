@@ -154,11 +154,14 @@
     $$("[data-chip]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.chip === id)));
     drawArrows(id);
     render();
+    document.dispatchEvent(new CustomEvent("cause-select", { detail: { id } }));   // the 3D graph flies to it
     if (fromTimeline) {
       scrollToEl($("#causes"));
       setTimeout(() => detail.focus({ preventScroll: true }), reduceMotion ? 0 : 900);
     }
   }
+
+  window.__selectCause = select;
 
   function render() {
     if (!current) {

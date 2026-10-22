@@ -84,6 +84,10 @@ export async function start(DATA) {
   try { (await import("./timeline.js")).init(DATA, api); }
   catch (e) { console.warn("3D timeline unavailable, using the flat list", e); flatTimeline(); }
 
+  /* the causes graph */
+  try { (await import("./graph.js")).init(DATA, api); }
+  catch (e) { console.warn("3D graph unavailable, using the flat web", e); html.classList.add("graph-flat"); }
+
   /* parallax photo band: a small moment, same easing */
   gsap.fromTo("#band .band-frame img", { yPercent: -6 }, { yPercent: 6, ease: "none", scrollTrigger: { trigger: "#band", start: "top bottom", end: "bottom top", scrub: true } });
 
