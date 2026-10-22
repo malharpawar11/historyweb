@@ -28,7 +28,7 @@ export const fall = bezier(0.7, 0, 0.84, 0);
 let renderer = null, canvas = null, W = 0, H = 0, ratio = 1;
 export let env = null;
 const stages = [];
-let raf = 0, running = false, last = 0, idle = 0, slow = 0, frames = 0;
+let dirty = false, raf = 0, running = false, last = 0, idle = 0, slow = 0, frames = 0;
 const listeners = { lost: [] };
 
 /* A tiny scene of softboxes baked to a reflection map. The custom lighting every scene shares. */
@@ -109,8 +109,12 @@ function frame(t) {
     if (r.width < 2 || r.height < 2 || r.bottom < -m || r.top > H + m) { s.visible = false; continue; }
     s.visible = true; vis.push([s, r]);
   }
-  if (!vis.length) { if (++idle > 24) stop(); return; }
-  idle = 0;
+  if (!vis.length) {
+    if (dirty) { renderer.setScissorTest(false); renderer.setViewport(0, 0, W, H); renderer.clear(); dirty = false; }   // never leave a stale frame pinned over the page
+    if (++idle > 24) stop();
+    return;
+  }
+  idle = 0; dirty = true;
 
   renderer.setScissorTest(false);
   renderer.setViewport(0, 0, W, H);

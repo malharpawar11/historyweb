@@ -272,6 +272,13 @@
       '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">Open the source</a></p></li>';
   }).join("");
 
+  /* image credits: one line per image, from the same data the captions use */
+  const clist = $("#credit-list");
+  if (clist) {
+    const rows = (D.IMAGES || []).map((m) => '<li><span>' + esc(m.title.replace(/\.(jpg|png)$/i, "").replace(/ \(\d{6,}\)$/, "")) + "</span> " + esc(shortAuthor(m.author)) + ', <a href="' + esc(m.licenseUrl) + '" target="_blank" rel="noopener">' + esc(m.license) + '</a>, <a href="' + esc(m.page) + '" target="_blank" rel="noopener">source</a>.</li>');
+    clist.innerHTML = rows.join("");
+  }
+
   render();
 
   /* Without the 3D chain, the hero button points at the timeline instead. */

@@ -372,6 +372,9 @@ input[type="range"]:focus-visible { outline-offset: -2px; }
 
 /* ------------------------------- then and now ------------------------------- */
 #then-now { padding-top: 0; }
+.strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); margin: var(--s7) 0; }
+.strip .photo img { aspect-ratio: 4 / 3; object-fit: cover; }
+@media (max-width: 900px) { .strip { grid-template-columns: 1fr; } }
 .band { margin-bottom: clamp(60px, 9vw, 130px); }
 .band-frame { position: relative; overflow: hidden; height: clamp(300px, 54vw, 640px); background: var(--field-deep); }
 .band-frame img { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
@@ -409,3 +412,12 @@ input[type="range"]:focus-visible { outline-offset: -2px; }
   .band-frame img { top: 0; height: 100%; }
 }
 @media print { .nav, .skip, .hero-stage, .chain { display: none !important; } body { background: #fff; } }
+
+/* image credits */
+.credits { margin-top: var(--s7); }
+.credits h3 { margin-bottom: var(--s2); }
+.credits p { max-width: 62ch; color: var(--ink-2); }
+.credits ul { margin-top: var(--s3); display: grid; gap: var(--s2); }
+.credits li { font-size: 0.95rem; line-height: 1.4; }
+.credits li span { font-weight: 600; }
+.credits a { color: inherit; }

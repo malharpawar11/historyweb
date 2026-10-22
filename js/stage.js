@@ -95,6 +95,14 @@ export async function start(DATA) {
   /* parallax photo band: a small moment, same easing */
   gsap.fromTo("#band .band-frame img", { yPercent: -6 }, { yPercent: 6, ease: "none", scrollTrigger: { trigger: "#band", start: "top bottom", end: "bottom top", scrub: true } });
 
+  /* Now: the photo strip, table rows and status list ease in, same easing as everywhere else */
+  const rise = gsap.utils.toArray("#then-now .strip figure, #then-now tbody tr, #then-now .status li, #then-now .open");
+  gsap.set(rise, { opacity: 0, y: 22 });
+  ScrollTrigger.batch(rise, {
+    start: "top 92%", once: true,
+    onEnter: (b) => gsap.to(b, { opacity: 1, y: 0, duration: 0.9, ease: (x) => arrive(x), stagger: 0.09, overwrite: true, clearProps: "transform,opacity" }),
+  });
+
   addEventListener("load", () => ScrollTrigger.refresh());
   setTimeout(() => ScrollTrigger.refresh(), 700);
 }
