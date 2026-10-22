@@ -88,6 +88,10 @@ export async function start(DATA) {
   try { (await import("./graph.js")).init(DATA, api); }
   catch (e) { console.warn("3D graph unavailable, using the flat web", e); html.classList.add("graph-flat"); }
 
+  /* the answer scene (desktop width only; below that the flat layout stays) */
+  try { (await import("./answer.js")).init(DATA, api); }
+  catch (e) { console.warn("3D answer scene unavailable, using the flat layout", e); document.getElementById("argument")?.classList.remove("ans-3d"); }
+
   /* parallax photo band: a small moment, same easing */
   gsap.fromTo("#band .band-frame img", { yPercent: -6 }, { yPercent: 6, ease: "none", scrollTrigger: { trigger: "#band", start: "top bottom", end: "bottom top", scrub: true } });
 

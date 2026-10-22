@@ -318,15 +318,57 @@ input[type="range"]:focus-visible { outline-offset: -2px; }
 .sw.PCE { background: var(--ink); } .sw.WXT { background: var(--gold); } .sw.ARC { background: var(--green-mid); }
 .cmp-sum { font: 700 1.35rem/1.25 var(--text); margin-bottom: var(--s3); max-width: 38ch; }
 
-/* ----------------------------------- argument ----------------------------------- */
-.argument { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(40px, 7vw, 110px); margin-top: var(--s7); align-items: start; }
+/* ----------------------------------- answer ----------------------------------- */
+/* Flat layout is the default and the fallback: copy left, figures and notes right, photos below.
+   .ans-3d (desktop with WebGL) turns it into one pinned scene. */
+.ans-frame { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: var(--s7) clamp(40px, 7vw, 110px); align-items: start; }
+.ans-copy h2 { margin-bottom: var(--s6); }
 .prose p { max-width: 62ch; margin-bottom: var(--s5); color: var(--on-field); }
 .prose .answer { font-size: clamp(1.7rem, 3vw, 2.25rem); line-height: 1.2; font-weight: 500; margin-bottom: var(--s6); max-width: 24ch; }
 .pull { max-width: 22ch; margin: var(--s7) 0; font: 800 clamp(2.2rem, 4.2vw, 3.4rem)/1 var(--display); color: var(--gold); }
-.claims { display: grid; gap: var(--s7); padding-top: var(--s5); }
+.ans-stage, .ans-credit { display: none; }
+.route { margin: 0 0 var(--s6); }
+.route svg { display: block; width: 100%; height: auto; }
+.route .rt { font: 800 34px var(--display); fill: var(--on-field); letter-spacing: 0.02em; }
+.route figcaption { margin-top: var(--s2); font-size: 0.92rem; color: var(--on-field-2); }
+.route figcaption a { color: inherit; }
+.stats { display: grid; gap: var(--s5); margin-bottom: var(--s7); }
+.stat b { display: block; font: 800 clamp(3rem, 6vw, 4.6rem)/0.95 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.stat .src-note { color: var(--on-field-2); }
+.stat > span { display: block; margin-top: var(--s2); max-width: 36ch; color: var(--on-field-2); font-size: 1.05rem; }
+.claims { display: grid; gap: var(--s6); }
 .claims h3 { color: var(--gold); margin-bottom: var(--s2); }
 .claims p { color: var(--on-field-2); font-size: 1.1rem; }
-@media (max-width: 900px) { .argument { grid-template-columns: 1fr; } }
+.ans-figs { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); }
+@media (max-width: 900px) { .ans-frame { grid-template-columns: 1fr; } .ans-figs { grid-template-columns: 1fr; } }
+
+/* pinned scene */
+.ans-3d { padding: 0; }
+.ans-3d .ans-pin { position: relative; z-index: 2; height: 100vh; padding-top: calc(var(--nav-h) + var(--s5)); padding-bottom: var(--s5); box-sizing: border-box; }
+.ans-3d .ans-frame { height: 100%; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 4vw, 72px); align-items: stretch; }
+.ans-3d .ans-copy { display: flex; flex-direction: column; min-height: 0; }
+.ans-3d .ans-copy h2 { margin-bottom: var(--s5); }
+.ans-3d .ans-beats { position: relative; flex: 1; min-height: 0; }
+.ans-3d .beat { position: absolute; left: 0; top: 0; right: 0; margin: 0; opacity: 0; }
+.ans-3d .prose p.beat { font-size: clamp(1.1rem, 1.35vw, 1.3rem); line-height: 1.5; }
+.ans-3d .prose .answer.beat { font-size: clamp(1.8rem, 2.8vw, 2.5rem); line-height: 1.18; }
+.ans-3d .pull.beat { font-size: clamp(2.4rem, 4.3vw, 4rem); }
+.ans-3d .ans-vis { position: relative; display: grid; grid-template-rows: minmax(0, 1fr) auto auto; min-height: 0; }
+.ans-3d .ans-stage { display: block; position: relative; grid-area: 1 / 1; min-height: 0; transition: opacity 600ms var(--arrive); }
+.ans-3d .ans-over { position: relative; height: clamp(190px, 27vh, 250px); margin-top: var(--s3); }
+.ans-3d .stats, .ans-3d .claims { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; align-items: stretch; }
+.ans-3d .stat, .ans-3d .claims > div { background: var(--field-deep); padding: var(--s4); border-top: 3px solid var(--gold); opacity: 0; }
+.ans-3d .stats { grid-template-columns: 1fr 1.5fr 1fr; }
+.ans-3d .stat b { font-size: clamp(2rem, 3.2vw, 2.9rem); white-space: nowrap; }
+.ans-3d .stat > span { font-size: 0.92rem; line-height: 1.35; margin-top: var(--s1); }
+.ans-3d .claims h3 { font-size: 1.05rem; margin-bottom: var(--s1); }
+.ans-3d .claims p { font-size: 0.92rem; line-height: 1.38; }
+.ans-3d .route { position: relative; grid-area: 1 / 1; min-height: 0; margin: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; opacity: 0; pointer-events: none; background: var(--field-deep); padding: var(--s4); }
+.ans-3d .route svg { height: 100%; min-height: 0; }
+.ans-3d .ans-credit { display: block; margin: var(--s2) 0 0; font-size: 0.8rem; line-height: 1.35; color: var(--on-field-2); }
+.ans-3d .ans-credit a { color: inherit; }
+.ans-3d .ans-figs { display: none; }
+.ans-3d.ans-3d-end .route { pointer-events: auto; }
 
 /* ------------------------------- then and now ------------------------------- */
 #then-now { padding-top: 0; }
