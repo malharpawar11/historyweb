@@ -363,7 +363,7 @@ input[type="range"]:focus-visible { outline-offset: -2px; }
 .ans-3d .ans-stage { display: block; position: relative; grid-area: 1 / 1; min-height: 0; transition: opacity 600ms var(--arrive); }
 .ans-3d .ans-over { position: relative; height: clamp(190px, 27vh, 250px); margin-top: var(--s3); }
 .ans-3d .stats, .ans-3d .claims { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; align-items: stretch; }
-.ans-3d .stat, .ans-3d .claims > div { background: var(--field-deep); padding: var(--s4); border-top: 3px solid var(--gold); opacity: 0; }
+.ans-3d .stat, .ans-3d .claims > div { background: var(--field-deep); padding: var(--s4); opacity: 0; }
 .ans-3d .stats { grid-template-columns: 1fr 1.5fr 1fr; }
 .ans-3d .stat b { font-size: clamp(2rem, 3.2vw, 2.9rem); white-space: nowrap; }
 .ans-3d .stat > span { font-size: 0.92rem; line-height: 1.35; margin-top: var(--s1); }

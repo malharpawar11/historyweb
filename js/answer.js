@@ -118,7 +118,7 @@ export function init(DATA, api) {
   section.classList.add("ans-3d");
   gsap.set(beats, { opacity: 0, y: 26 });
   gsap.set([...stats, ...notes], { opacity: 0, y: 18 });
-  gsap.set(route, { opacity: 0 });
+  gsap.set(route, { autoAlpha: 0 });   // autoAlpha also hides it from the keyboard while it is invisible
 
   const E = (x) => arrive(x);
   const show = (tl, el, at, d = 0.7) => tl.to(el, { opacity: 1, y: 0, duration: d, ease: E }, at);
@@ -136,12 +136,12 @@ export function init(DATA, api) {
   show(tl, stats[0], 2.0, 0.6); show(tl, stats[1], 3.1, 0.6);
   // beat 3: Oklahoma City, and the vote
   hide(tl, beats[1], 4.3); show(tl, beats[2], 4.55, 0.8);
-  tl.to(stageEl, { opacity: 0.12, duration: 0.5 }, 4.4).to(route, { opacity: 1, duration: 0.6 }, 4.6)
+  tl.to(stageEl, { opacity: 0.12, duration: 0.5 }, 4.4).to(route, { autoAlpha: 1, duration: 0.6 }, 4.6)
     .fromTo(routeLine, { strokeDashoffset: len }, { strokeDashoffset: 0, strokeDasharray: len, duration: 1.1 }, 4.9)
     .set(routeLine, { strokeDasharray: "14 12" }, 6.0);
   show(tl, stats[2], 5.2, 0.6);
   // beat 4: the pull quote, the ball rolls to the lit exit
-  hide(tl, beats[2], 6.5); hide(tl, route, 6.4); tl.to(stageEl, { opacity: 1, duration: 0.5 }, 6.5);
+  hide(tl, beats[2], 6.5); tl.to(route, { autoAlpha: 0, duration: 0.45, ease: "power2.in" }, 6.4); tl.to(stageEl, { opacity: 1, duration: 0.5 }, 6.5);
   show(tl, beats[3], 6.9, 0.8);
   tl.to(S, { ball: 1, duration: 1.8 }, 6.9).to(S, { lit: 1, duration: 1.2 }, 7.4);
   // beat 5: what else matters, and the three notes

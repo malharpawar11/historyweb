@@ -148,3 +148,4 @@ function frame(t) {
 
 /* A stage is "on screen" for other code that wants to know. */
 export const visibleStages = () => stages.filter((s) => s.visible);
+export const allStages = () => stages;   // for ?debug health checks
