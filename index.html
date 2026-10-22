@@ -75,7 +75,7 @@
         <p class="hero-q">What was the effect of the public arena-funding dispute on the SuperSonics’ departure from Seattle, 2006–2008?</p>
         <p class="hero-by">A Real History project by Malhar Pawar, 2026.</p>
         <p class="hero-actions">
-          <a class="btn" href="#chain">Follow the chain of events</a>
+          <a class="btn" href="#timeline">Follow the chain of events</a>
           <a class="textlink" href="#argument">Read my working answer</a>
         </p>
       </div>
@@ -111,37 +111,26 @@
     </div>
   </section>
 
-  <!-- CHAIN (3D, pinned) -->
-  <section class="chain field-deep" id="chain" aria-label="The chain of events, one domino per event">
-    <div class="chain-pin">
-      <canvas id="chain-canvas" aria-hidden="true"></canvas>
-      <div class="chain-text">
-        <h2>A row of dominoes.</h2>
-        <p class="chain-intro">My first plan was a chain. Each event knocks over the next, so every step looks inevitable.</p>
-        <div class="chain-event" id="chain-event" aria-live="polite">
-          <p class="ce-count" id="ce-count"></p>
-          <p class="ce-date" id="ce-date"></p>
-          <h3 id="ce-title"></h3>
-          <p id="ce-text"></p>
-          <p class="ce-src" id="ce-src"></p>
+  <!-- TIMELINE: a pinned 3D journey. The cards are the same HTML list used by the flat version below. -->
+  <section class="tl3d field-deep" id="timeline" aria-labelledby="h-tl3">
+    <div class="tl3d-pin">
+      <div class="tl3d-stage" id="tl-stage"></div>
+      <div class="tl3d-ui">
+        <div class="tl3d-head">
+          <h2 id="h-tl3">Two tracks, one chain of events.</h2>
+          <p class="lead">Seattle and Washington on the left, the owners on the right, shared events on the spine. Six milestones tip a domino as you pass. My first plan was a chain where each event knocks over the next. The evidence did not work like that.</p>
         </div>
-        <p class="chain-hint" id="chain-hint">Keep scrolling to tip the next domino.</p>
+        <div class="tl3d-cards" id="tl-cards"></div>
+        <p class="tl3d-hint" id="tl-hint">Keep scrolling to travel through time.</p>
+        <ol class="tl-ruler" id="tl-ruler" aria-label="Jump to an event"></ol>
       </div>
     </div>
   </section>
 
-  <section class="section field-deep notchain" aria-labelledby="h-nc">
+  <section class="section paper tl-flat" id="timeline-flat" aria-labelledby="h-tl">
     <div class="wrap">
-      <h2 id="h-nc">Tidy, and too simple.</h2>
-      <p class="lead">A chain makes each event the cause of the next. The evidence does not work like that. Causes overlapped, pushed on each other, and some mattered less than they seem. Next come the same events on two tracks, then the causes as a web.</p>
-    </div>
-  </section>
-
-  <!-- TIMELINE -->
-  <section class="section paper" id="timeline" aria-labelledby="h-tl">
-    <div class="wrap">
-      <h2 id="h-tl">The same events on two tracks.</h2>
-      <p class="lead">Seattle and Washington on the left, the owners on the right, shared events in the middle. Select a card to open its cause.</p>
+      <h2 id="h-tl">Two tracks, one chain of events.</h2>
+      <p class="lead">Seattle and Washington on the left, the owners on the right, shared events in the middle. My first plan was a chain where each event knocks over the next. The evidence did not work like that. Select a card to open its cause.</p>
       <ol class="tl" id="tl"></ol>
     </div>
   </section>

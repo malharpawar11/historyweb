@@ -63,7 +63,7 @@
     const src = m.widths.map((w) => base + "-" + w + ".webp " + w + "w").join(", ");
     const big = Math.max.apply(null, m.widths);
     fig.innerHTML =
-      '<img src="' + base + "-" + big + '.webp" srcset="' + src + '" sizes="' + esc(fig.dataset.sizes || "100vw") + '" width="' + m.w + '" height="' + m.h + '" loading="lazy" decoding="async" alt="' + esc(m.alt) + '">' +
+      '<img src="' + base + "-" + big + '.webp" srcset="' + src + '" sizes="' + esc(fig.dataset.sizes || "100vw") + '" width="' + m.w + '" height="' + m.h + '" loading="' + (fig.closest("#tl") ? "eager" : "lazy") + '" decoding="async" alt="' + esc(m.alt) + '">' +
       "<figcaption>" + esc(m.caption) + ' <span class="credit">Photo: ' + esc(shortAuthor(m.author)) + ", " +
       '<a href="' + esc(m.licenseUrl) + '" target="_blank" rel="noopener">' + esc(m.license) + '</a>, via <a href="' + esc(m.page) + '" target="_blank" rel="noopener">Wikimedia Commons</a>.</span></figcaption>';
   }
@@ -74,11 +74,13 @@
   const tl = $("#tl");
   D.EVENTS.forEach((ev) => {
     const li = document.createElement("li");
-    li.className = "tl-row" + (ev.track === "both" ? " is-both" : "");
+    li.className = "tl-row" + (ev.track === "both" ? " is-both" : "") + (ev.ms ? " ms" : "");
     const cites = ev.src.map((id) => D.SOURCES[id].short.split(",")[0].replace(/^Associated Press.*/, "Associated Press")).filter((v, i, a) => a.indexOf(v) === i).join(", ");
     li.innerHTML =
       '<span class="tl-date">' + esc(ev.date) + "</span>" +
       '<div class="tl-card ' + ev.track + '">' +
+        (ev.media && ev.media.img ? '<figure data-img="' + ev.media.img + '" data-variant="duo" data-sizes="360px"></figure>' : "") +
+        (ev.media && ev.media.num ? '<p class="tl-num"><b>' + esc(ev.media.num) + "</b><span>" + esc(ev.media.cap) + "</span></p>" : "") +
         "<h3>" + esc(ev.title) + "</h3>" +
         "<p>" + esc(ev.text) + "</p>" +
         '<p class="track">Track: ' + TRACK[ev.track] + ". Source: " + esc(cites) + ".</p>" +
@@ -88,6 +90,7 @@
     li.querySelector("button").addEventListener("click", () => select(ev.node, true));
     tl.appendChild(li);
   });
+  $$("#tl [data-img]").forEach(buildImage);
 
   /* ------------------------------ causal web ------------------------------ */
   const NS = "http://www.w3.org/2000/svg";
@@ -252,13 +255,18 @@
     const cta = $(".hero-actions .btn");
     if (cta) { cta.setAttribute("href", "#timeline"); cta.textContent = "Follow the timeline"; }
   }
-  if (html.classList.contains("no-3d")) pointCtaAtTimeline();
+  if (html.classList.contains("no-3d")) {
+    pointCtaAtTimeline();
+    const a = $("#timeline"), b = $("#timeline-flat");     // the flat list takes over the #timeline anchor
+    if (a && b) { a.id = "timeline-3d"; b.id = "timeline"; }
+  }
 
   /* ------------------------- 3D layer, loaded lazily ------------------------- */
   if (html.classList.contains("has-3d")) {
     const go = () => import("./stage.js").then((m) => m.start(D)).catch((err) => {
       console.warn("3D layer failed to load; the page stays fully readable.", err);
       html.classList.remove("has-3d", "pre-motion"); html.classList.add("no-3d"); pointCtaAtTimeline();
+      import("./stage.js").then((m) => m.flatTimeline && m.flatTimeline());
     });
     const idle = window.requestIdleCallback || ((f) => setTimeout(f, 200));
     window.addEventListener("load", () => idle(go, { timeout: 1500 }));

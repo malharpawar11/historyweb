@@ -130,35 +130,36 @@ p { text-wrap: pretty; }
 .field .photo figcaption, .field-deep .photo figcaption { color: var(--on-field-2); }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; } .defs { padding-top: var(--s5); } }
 
-/* ------------------------------------ chain ------------------------------------ */
-.no-3d .chain, .no-3d .notchain { display: none; }
-.chain { position: relative; }
-.chain-pin { height: calc(100svh - var(--nav-h)); display: grid; grid-template-columns: minmax(300px, 36%) 1fr; overflow: hidden; }
-.chain-pin canvas { grid-column: 2; grid-row: 1; width: 100%; height: 100%; opacity: 0; transition: opacity 600ms var(--arrive); -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14%); mask-image: linear-gradient(to right, transparent 0, #000 14%); }
-.chain.ready canvas { opacity: 1; }
-.chain-text { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; justify-content: center; gap: var(--s5); padding: var(--s6) var(--s5) var(--s6) var(--gutter); }
-.chain-text h2 { font-size: clamp(2.6rem, 5vw, 4.4rem); margin: 0; }
-.chain-intro { color: var(--on-field-2); max-width: 34ch; }
-.chain-event { min-height: 15rem; transition: opacity 260ms var(--arrive), transform 260ms var(--arrive); }
-.chain-event.swap { opacity: 0; transform: translateY(10px); }
-.ce-count { color: var(--on-field-2); font-size: 0.95rem; font-weight: 500; }
-.ce-date { font: 900 clamp(2.8rem, 5.4vw, 5rem)/0.92 var(--display); color: var(--gold); margin: var(--s1) 0 var(--s3); }
-.chain-event h3 { font-size: 1.5rem; margin-bottom: var(--s2); color: var(--on-field); }
-.chain-event p { font-size: 1.05rem; line-height: 1.5; }
-.ce-src { color: var(--on-field-2); font-size: 0.88rem !important; margin-top: var(--s3); }
-.chain-hint { color: var(--on-field-2); font-size: 0.95rem; transition: opacity 400ms; }
-.chain-hint.gone { opacity: 0; }
-@media (max-width: 860px) {
-  .chain-pin { grid-template-columns: 1fr; grid-template-rows: 46svh 1fr; }
-  .chain-pin canvas { grid-column: 1; grid-row: 1; -webkit-mask-image: none; mask-image: none; }
-  .chain-text { grid-column: 1; grid-row: 2; justify-content: flex-start; padding: var(--s5) var(--gutter) var(--s5); gap: var(--s3); }
-  .chain-text h2 { display: none; }
-  .chain-intro { display: none; }
-  .chain-event { min-height: 11.5rem; }
-  .ce-date { font-size: 2.6rem; }
-}
-.notchain .lead { max-width: 60ch; }
-.notchain h2 { max-width: 12ch; }
+/* ------------------------------ timeline (3D) ------------------------------ */
+.no-3d .tl3d, .tl-flat-mode .tl3d { display: none; }
+.has-3d:not(.tl-flat-mode) .tl-flat { display: none; }
+/* the shared canvas is z-index 1 behind the page; anything with text sits above it, so the pinned layer is z-index 2 and transparent */
+.tl3d { position: relative; }
+.tl3d-pin { position: relative; z-index: 2; height: calc(100svh - var(--nav-h)); overflow: hidden; }
+.tl3d-stage { position: absolute; inset: 0; }
+.tl3d-ui { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.tl3d-head { position: absolute; left: var(--gutter); top: var(--s6); max-width: 34ch; z-index: 1; }
+.tl3d-head h2 { font-size: clamp(2.1rem, 3.6vw, 3.4rem); margin: 0 0 var(--s3); max-width: 12ch; }
+.tl3d-head .lead { font-size: 1rem; line-height: 1.45; max-width: 36ch; }
+.tl3d-cards { position: absolute; inset: 0; overflow: hidden; }
+.tl3d-hint { position: absolute; left: var(--gutter); bottom: calc(var(--s7) + 28px); color: var(--on-field-2); font-size: 0.95rem; transition: opacity 400ms; }
+.tl3d-hint.gone { opacity: 0; }
+.tl-ruler { position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--s3); display: flex; gap: 4px; overflow-x: auto; pointer-events: auto; scrollbar-width: none; }
+.tl-ruler::-webkit-scrollbar { display: none; }
+.tl-ruler button { flex: 0 0 auto; min-height: 44px; padding: 0 var(--s3); background: var(--field); color: var(--on-field-2); border: 0; cursor: pointer; font: 500 0.88rem var(--text); white-space: nowrap; transition: background 150ms, color 150ms; }
+.tl-ruler .ms button { font-weight: 700; color: var(--on-field); }
+.tl-ruler button:hover { color: var(--on-field); }
+.tl-ruler button[aria-current="true"] { background: var(--gold); color: var(--ink); }
+.tl.tl-3d { margin: 0; }
+.tl.tl-3d::before { display: none; }
+.tl-3d .tl-row { position: absolute; left: 0; top: 0; display: block; width: min(88vw, 340px); margin: 0; padding: 0; visibility: hidden; opacity: 0; will-change: transform, opacity; }
+.tl-3d .tl-row.is-both { margin: 0; }
+.tl-3d .tl-date { position: static; display: inline-block; margin-bottom: 6px; background: var(--ink); color: var(--on-field); }
+.tl-3d .tl-card, .tl-3d .tl-card.city, .tl-3d .tl-card.owners, .tl-3d .tl-card.both { display: block; grid-column: auto; grid-row: auto; margin: 0; max-width: none; width: 100%; text-align: left; justify-self: auto; }
+.tl-3d .tl-card:hover { transform: none; }
+.tl-3d .tl-row.ms { width: min(88vw, 380px); }
+.tl-3d .tl-card figure img { aspect-ratio: 2 / 1; }
+.tl-3d .tl-row.ms .tl-card h3 { font-size: 1.5rem; }
 
 /* ---------------------------------- timeline ---------------------------------- */
 .tl { position: relative; margin-top: var(--s8); }
@@ -171,6 +172,13 @@ p { text-wrap: pretty; }
 .tl-card.owners { grid-column: 3; background: var(--field); color: var(--on-field); margin-left: var(--s5); }
 .tl-card.both { grid-column: 1 / -1; grid-row: 2; justify-self: center; max-width: 600px; margin-top: var(--s3); background: var(--gold); color: var(--ink); }
 .tl-card h3 { font-size: 1.3rem; margin-bottom: var(--s2); }
+.tl-card figure { margin: calc(var(--s5) * -1) calc(var(--s5) * -1) var(--s4); }
+.tl-card figure img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.tl-card figure figcaption { padding: var(--s2) var(--s5) 0; font-size: 0.8rem; opacity: 0.8; color: inherit; margin: 0; }
+.tl-card figure figcaption a { color: inherit; }
+.tl-num { display: flex; align-items: baseline; gap: var(--s3); margin-bottom: var(--s3); }
+.tl-num b { font: 900 3.4rem/0.85 var(--display); letter-spacing: -0.01em; }
+.tl-num span { font-size: 0.95rem; opacity: 0.85; }
 .tl-card p { font-size: 1rem; line-height: 1.5; }
 .tl-card .track { margin-top: var(--s3); font-size: 0.88rem; opacity: 0.85; }
 .tl-card .go { display: inline-block; min-height: 44px; margin-top: var(--s1); padding: 0; background: none; border: 0; cursor: pointer; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 0.2em; }

@@ -223,12 +223,14 @@ window.DATA = (function () {
       text: "Bennett promises to spend a full year seeking a viable Seattle home for the team." },
     { date: "Nov 7, 2006", track: "city", node: "i91", src: ["licata", "horsefeathers"],
       title: "Seattle voters pass Initiative 91",
+      ms: true, media: { img: "city-hall" },
       text: "74% say the city must get “fair value” for any investment in a pro sports facility." },
     { date: "Feb 2007", track: "owners", node: "state", src: ["brunner07"],
       title: "Bennett turns to the state",
       text: "He asks for $300 million of King County taxes toward a roughly $500 million arena in Renton. I-91 does not reach the state." },
     { date: "Apr 16, 2007", track: "city", node: "state", src: ["ap_leg07", "kershner"],
       title: "The Legislature won’t vote",
+      ms: true, media: { img: "legislative-building" },
       text: "Lawmakers say there isn’t time before April 22. Governor Gregoire declines a special session." },
     { date: "Apr 17, 2007", track: "owners", node: "owners", src: ["ap_bulletin", "ap_stern"],
       title: "The Ward–Bennett emails",
@@ -244,27 +246,28 @@ window.DATA = (function () {
       text: "The owners offer to pay to leave the lease early. The city says no." },
     { date: "Mar 2008", track: "owners", node: "okc", src: ["brunner08"],
       title: "Oklahoma City approves $120 million",
+      media: { img: "ford-center" },
       text: "Voters there approve taxes for an arena upgrade aimed at attracting the team." },
     { date: "Mar 2008", track: "city", node: "state", src: ["brunner08", "kershner"],
       title: "A Ballmer-backed plan stalls",
       text: "Investors offer to cover half of a $300 million KeyArena rebuild, if they can buy the team. Lawmakers are skeptical, and the session ends without approval." },
     { date: "Apr 13, 2008", track: "both", node: "attendance", src: ["kershner"],
       title: "The final home game",
+      ms: true, media: { img: "keyarena-2018" },
       text: "About 15,000 fans fill KeyArena. The Sonics had played in Seattle for 41 years." },
     { date: "Apr 18, 2008", track: "both", node: "nba", src: ["kershner"],
       title: "NBA owners vote 28–2",
+      ms: true, media: { num: "28–2", cap: "the NBA owners’ vote" },
       text: "Dallas and Portland vote no. The move is approved, pending Seattle’s lawsuit." },
     { date: "Jun 2008", track: "both", node: "owners", src: ["ap_bulletin"],
       title: "Six days in federal court",
+      ms: true, media: { num: "6 days", cap: "in federal court" },
       text: "Bennett testifies on June 17 that he was reaffirming his commitment to Seattle, not answering a proposal to move." },
     { date: "Jul 2, 2008", track: "both", node: "state", src: ["ap_settle"],
       title: "The settlement",
+      ms: true, media: { num: "$45M", cap: "paid now to leave the lease" },
       text: "$45 million now. Up to $30 million more only if the Legislature authorizes at least $75 million for KeyArena by the end of 2009 and Seattle gets no NBA team within five years. The name, logo and colors stay available for a replacement team." },
   ];
 
-  /* ---------------- CHAIN (the simple story, one domino per event) ----------------
-     Indexes into EVENTS. Track colors the domino: city = green, owners = gold, both = ivory. */
-  const CHAIN = [0, 1, 2, 3, 4, 8, 11, 13];
-
-  return { VOICES, THEMES, SOURCES, CAUSES, EVENTS, CHAIN };
+  return { VOICES, THEMES, SOURCES, CAUSES, EVENTS };
 })();
