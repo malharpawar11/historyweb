@@ -227,7 +227,7 @@ function chainScene(D_, ctl) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, MAX_DPR));
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.shadowMap.enabled = true;   // default PCF filtering; softness comes from shadow.radius
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;   // softness comes from shadow.radius
 
   const BG = 0x04251a;
   const scene = new THREE.Scene();
@@ -272,9 +272,9 @@ function chainScene(D_, ctl) {
     });
   };
 
-  const view = { x: 0.5, aspect: 1 };
+  const view = { x: 0.5, aspect: 1, zoom: 1 };
   const place = () => {
-    const far = clamp(1.05 / view.aspect, 1, 2.1);
+    const far = clamp(1.05 / view.aspect, 1, 2.1) * view.zoom;
     camera.position.set(view.x - 4.4 * far, 3.0 * far + 0.2, 5.9 * far);
     camera.lookAt(view.x + 1.0, 0.8, 0);
     floor.position.x = view.x + 1.5;
@@ -337,7 +337,11 @@ function chainScene(D_, ctl) {
     });
     // camera follows the falling front, slightly ahead of it
     const front = Math.min(N - 1, fallen) * S;
-    state.focus = damp(state.focus, 0.5 + front * 0.94, 2.6, dt);
+    // the finale: over the last stretch of scroll the camera backs away to show the whole fallen chain
+    const wrap = arrive(clamp((p - 0.86) / 0.14, 0, 1));
+    const follow = 0.5 + front * 0.94, whole = ((N - 1) * S) / 2 + 0.2;
+    state.focus = damp(state.focus, follow + (whole - follow) * wrap, 2.6, dt);
+    view.zoom = 1 + 0.8 * wrap;
     view.x = state.focus; place();
 
     let idx = 0;
@@ -353,6 +357,7 @@ function chainScene(D_, ctl) {
   return {
     init() { build(); setEvent(0, true); resize(); loop.once(); section.classList.add("ready"); },
     setProgress(v) { state.target = v; },
+    snap(v) { state.target = v; tick(10); tick(10); },   // deterministic frame for ?debug capture
   };
 }
 
@@ -396,6 +401,7 @@ export async function start(DATA) {
   let chain = null, chainBuilt = false;
   try {
     chain = chainScene(DATA, { lost: onLost });
+    if (/[?&]debug\b/.test(location.search)) window.__chain = chain;
     const mobile = innerWidth < 860;
     const navH = 64;
     ScrollTrigger.create({
