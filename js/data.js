@@ -262,8 +262,9 @@ window.DATA = (function () {
       text: "$45 million now. Up to $30 million more only if the Legislature authorizes at least $75 million for KeyArena by the end of 2009 and Seattle gets no NBA team within five years. The name, logo and colors stay available for a replacement team." },
   ];
 
-  /* ---------------- DOMINOES (the simple story) ---------------- */
-  const DOMINOES = ["An old arena", "Owners want public money", "Initiative 91", "The state says no", "Oklahoma City"];
+  /* ---------------- CHAIN (the simple story, one domino per event) ----------------
+     Indexes into EVENTS. Track colors the domino: city = green, owners = gold, both = ivory. */
+  const CHAIN = [0, 1, 2, 3, 4, 8, 11, 13];
 
-  return { VOICES, THEMES, SOURCES, CAUSES, EVENTS, DOMINOES };
+  return { VOICES, THEMES, SOURCES, CAUSES, EVENTS, CHAIN };
 })();
