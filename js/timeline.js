@@ -142,7 +142,7 @@ export function init(DATA, api) {
       // keep the whole card on screen, clear of the heading block and the ruler
       const hw = (row.offsetWidth * s) / 2 + 16, hh = (row.offsetHeight * s) / 2 + 12;
       x = clamp(x, hw, w - hw); y = clamp(y, hh + 70, h - hh - 64);
-      if (!narrow && x - hw < 470 && y - hh < 250) y = 250 + hh;   // stay below the heading block
+      if (!narrow && x - hw < 470 && y - hh < 250) y = 250 + hh; else if (narrow && y - hh < 120) y = 120 + hh;   // stay below the heading block
       row.style.opacity = o.toFixed(3);
       row.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) translate(-50%,-50%) scale(" + s.toFixed(3) + ")";
       row.style.zIndex = String(Math.round(2000 / d));

@@ -150,6 +150,7 @@ p { text-wrap: pretty; }
 .tl-ruler .ms button { font-weight: 700; color: var(--on-field); }
 .tl-ruler button:hover { color: var(--on-field); }
 .tl-ruler button[aria-current="true"] { background: var(--gold); color: var(--ink); }
+@media (max-width: 860px) { .tl3d-head .lead { display: none; } .tl3d-head h2 { font-size: 2rem; } .tl3d-hint { bottom: calc(var(--s7) + 18px); } }
 .tl.tl-3d { margin: 0; }
 .tl.tl-3d::before { display: none; }
 .tl-3d .tl-row { position: absolute; left: 0; top: 0; display: block; width: min(88vw, 340px); margin: 0; padding: 0; visibility: hidden; opacity: 0; will-change: transform, opacity; }
